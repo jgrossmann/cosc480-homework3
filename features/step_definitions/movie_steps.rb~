@@ -23,27 +23,27 @@ end
 When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
 	ratings = rating_list.split(', ')
 	ratings.each do |rating|
-		if uncheck == "un"
-			step %{I uncheck "ratings_#{rating}"}
-		else
-			step %{I check "ratings_#{rating}"}
-		end
+	if uncheck == "un"
+		step %{I uncheck "ratings_#{rating}"}
+	else
+		step %{I check "ratings_#{rating}"}
 	end
+end
 end
 
 Then /the following checkboxes should be (un)?checked: (.*)/ do |uncheck, rating_list|
 	ratings = rating_list.split(", ")
 	ratings.each do |rating|
-		if uncheck == "un"
-			step %{the "ratings_#{rating}" checkbox should not be checked}
-		else
-			step %{the "ratings_#{rating}" checkbox should be checked}
-		end
+	if uncheck == "un"
+		step %{the "ratings_#{rating}" checkbox should not be checked}
+	else
+		step %{the "ratings_#{rating}" checkbox should be checked}
 	end
+end
 end
 
 Then /the movies should (not )?be visible with the following ratings: (.*)/ do |shown, rating_list|
-	shown = (shown == "not ") ? "not see" : "see"
+	shown = (shown == "not ") ? "not see" : "see" end
 	ratings = rating_list.split(", ")
 	ratings.each do |rating|
 		movies = Movie.find_all_by_rating("#{rating}")

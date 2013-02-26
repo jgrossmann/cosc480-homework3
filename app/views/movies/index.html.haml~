@@ -2,6 +2,7 @@
 %h1 All Movies
 
 =	form_tag movies_path, :method => :get, :id => 'ratings_form' do
+	%label{:for => "ratings[#{rating}]"}
 	= hidden_field_tag "title_sort", true if @title_header
 	= hidden_field_tag ":release_date_sort", true if @date_header
 	Include: 
