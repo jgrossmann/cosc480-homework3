@@ -23,27 +23,27 @@ end
 When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
 	ratings = rating_list.split(', ')
 	ratings.each do |rating|
-	if uncheck == "un"
-		step %{I uncheck "ratings_#{rating}"}
-	else
-		step %{I check "ratings_#{rating}"}
+		if uncheck == "un"
+			step %{I uncheck "ratings_#{rating}"}
+		else
+			step %{I check "ratings_#{rating}"}
+		end
 	end
-end
 end
 
 Then /the following checkboxes should be (un)?checked: (.*)/ do |uncheck, rating_list|
 	ratings = rating_list.split(", ")
 	ratings.each do |rating|
-	if uncheck == "un"
-		step %{the "ratings_#{rating}" checkbox should not be checked}
-	else
-		step %{the "ratings_#{rating}" checkbox should be checked}
+		if uncheck == "un"
+			step %{the "ratings_#{rating}" checkbox should not be checked}
+		else
+			step %{the "ratings_#{rating}" checkbox should be checked}
+		end
 	end
-end
 end
 
 Then /the movies should (not )?be visible with the following ratings: (.*)/ do |shown, rating_list|
-	shown = (shown == "not ") ? "not see" : "see" end
+	shown = (shown == "not ") ? "not see" : "see"
 	ratings = rating_list.split(", ")
 	ratings.each do |rating|
 		movies = Movie.find_all_by_rating("#{rating}")
@@ -52,3 +52,25 @@ Then /the movies should (not )?be visible with the following ratings: (.*)/ do |
 		end
 	end
 end
+
+Then /I should see all of the movies/ do
+	rows = page.all('table#movies tr')
+	assert rows.length-1 == Movie.count()
+end
+
+Then /I should see none of the movies/ do
+	rows = page.all('table#movies tr')
+	assert rows.length-1 == 0
+end
+
+Then /I should see all the movies in order by (.*)/ do |sort|
+	assert (sort == "title" || sort == "release date")
+	(sort == "release date") ? "release_date" : sort
+	movies = Movie.all(:order => "#{sort}")
+	i = 0
+	until i >= movies.length-1 do
+		assert step %{I should see "#{movies[i][:title]}" before "#{movies[i+1][:title]}"}
+		i = i + 1
+	end
+end
+		

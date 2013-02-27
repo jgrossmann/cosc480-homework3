@@ -24,12 +24,19 @@ Background: movies have been added to database
 Scenario: restrict to movies with 'PG' or 'R' ratings
 
 	When I check the following ratings: PG, R
-	And I uncheck the following ratings: G, PG-13
+	And I uncheck the following ratings: G, PG-13, NC-17
 	And I press "Refresh"
+	Then I should be on the RottenPotatoes home page
 	And the following checkboxes should be checked: PG, R
-	And the following checkboxes should be unchecked: G, PG-13
+	And the following checkboxes should be unchecked: G, PG-13, NC-17
 	And the movies should be visible with the following ratings: PG, R
-	And the movies should not be visible with the following ratings: G, PG-13
+	And the movies should not be visible with the following ratings: G, PG-13, NC-17
 
 Scenario: all ratings selected
-  # see assignment
+  
+	When I check the following ratings: G, PG, PG-13, R, NC-17
+	And I press "Refresh"
+	Then I should be on the RottenPotatoes home page
+	And the following checkboxes should be checked: G, PG, PG-13, R, NC-17
+	And I should see all of the movies
+

@@ -52,3 +52,27 @@ Then /the movies should (not )?be visible with the following ratings: (.*)/ do |
 		end
 	end
 end
+
+Then /I should see all of the movies/ do
+	rows = page.all('table#movies tr')
+	assert rows.length-1 == Movie.count()
+end
+
+Then /I should see none of the movies/ do
+	rows = page.all('table#movies tr')
+	assert rows.length-1 == 0
+end
+
+Then /I should see all the movies in order by (.*)/ do |sort|
+	assert (sort == "title" || sort == "release date")
+	if sort == "release date"
+		sort = "release_date"
+	end
+	movies = Movie.all(:order => "#{sort}")
+	i = 0
+	until i >= movies.length-1 do
+		assert step %{I should see "#{movies[i][:title]}" before "#{movies[i+1][:title]}"}
+		i = i + 1
+	end
+end
+		
